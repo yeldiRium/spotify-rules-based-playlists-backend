@@ -45,7 +45,7 @@ var ServerCommand = &cobra.Command{
 				Msg("--database-url is missing")
 		}
 
-		pool, err := pgxpool.Connect(context.Background(), setupDatabaseUrlFlag)
+		pool, err := pgxpool.Connect(context.Background(), serverDatabaseUrlFlag)
 		if err != nil {
 			log.
 				Fatal().
