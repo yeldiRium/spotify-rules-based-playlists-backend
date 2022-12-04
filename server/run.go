@@ -1,6 +1,8 @@
 package server
 
 import (
+	"github.com/yeldiRium/spotify-rules-based-playlists-backend/client/spotify"
+	"github.com/yeldiRium/spotify-rules-based-playlists-backend/server/oauth/callback"
 	"net/http"
 	"strconv"
 
@@ -19,7 +21,8 @@ func Run(
 	verbose bool,
 	spotifyClientID string,
 	spotifyClientSecret string,
-	frontendUrl string,
+	spotifyRedirectURI string,
+	frontendURL string,
 	pool *pgxpool.Pool,
 ) {
 	if verbose {
@@ -29,13 +32,14 @@ func Run(
 			Msg("verbose mode enabled")
 	}
 
+	spotifyClient := spotify.NewSpotifyClient(spotifyClientID, spotifyClientSecret, spotifyRedirectURI)
+
 	sessionManager := scs.New()
 	sessionManager.Store = pgxstore.New(pool)
 
 	router := newRouter(
-		spotifyClientID,
-		spotifyClientSecret,
-		frontendUrl,
+		spotifyClient,
+		frontendURL,
 		pool,
 		sessionManager,
 	)
@@ -58,9 +62,8 @@ func Run(
 }
 
 func newRouter(
-	spotifyClientID string,
-	spotifyClientSecret string,
-	frontendUrl string,
+	spotifyClient spotify.SpotifyClient,
+	frontendURL string,
 	pool *pgxpool.Pool,
 	sessionManager *scs.SessionManager,
 ) *httprouter.Router {
@@ -70,6 +73,12 @@ func newRouter(
 		"GET",
 		"/health",
 		health.Handle(),
+	)
+
+	router.Handler(
+		"GET",
+		"/oauth/callback",
+		callback.Handle(spotifyClient, frontendURL, sessionManager),
 	)
 
 	return router

@@ -12,7 +12,8 @@ import (
 var serverHTTPPortFlag int
 var serverSpotifyClientIDFlag string
 var serverSpotifyClientSecretFlag string
-var serverFrontendUrlFlag string
+var serverSpotifyRedirectURI string
+var serverFrontendURLFlag string
 var serverDatabaseUrlFlag string
 
 func init() {
@@ -20,7 +21,8 @@ func init() {
 	ServerCommand.Flags().IntVar(&serverHTTPPortFlag, "http-port", 3_000, "sets the HTTP API port to listen on")
 	ServerCommand.Flags().StringVar(&serverSpotifyClientIDFlag, "spotify-client-id", "", "sets the Spotify Client ID for OAuth2.0")
 	ServerCommand.Flags().StringVar(&serverSpotifyClientSecretFlag, "spotify-client-secret", "", "sets the Spotify Client Secret for OAuth2.0")
-	ServerCommand.Flags().StringVar(&serverFrontendUrlFlag, "frontend-url", "", "sets the URL under which the frontend is deployed")
+	ServerCommand.Flags().StringVar(&serverSpotifyRedirectURI, "spotify-redirect-uri", "", "sets the Spotify Redirect URI for OAuth2.0")
+	ServerCommand.Flags().StringVar(&serverFrontendURLFlag, "frontend-url", "", "sets the URL under which the frontend is deployed")
 	ServerCommand.Flags().StringVar(&serverDatabaseUrlFlag, "database-url", "", "sets the URL for the database")
 }
 
@@ -36,7 +38,11 @@ var ServerCommand = &cobra.Command{
 			log.Fatal().
 				Msg("--spotify-client-secret is missing")
 		}
-		if serverFrontendUrlFlag == "" {
+		if serverSpotifyRedirectURI == "" {
+			log.Fatal().
+				Msg("--spotify-redirect-uri is missing")
+		}
+		if serverFrontendURLFlag == "" {
 			log.Fatal().
 				Msg("--frontend-url is missing")
 		}
@@ -59,7 +65,8 @@ var ServerCommand = &cobra.Command{
 			rootVerboseFlag,
 			serverSpotifyClientIDFlag,
 			serverSpotifyClientSecretFlag,
-			serverFrontendUrlFlag,
+			serverSpotifyRedirectURI,
+			serverFrontendURLFlag,
 			pool,
 		)
 	},
