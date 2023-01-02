@@ -7,7 +7,7 @@ require (
 	github.com/alexedwards/scs/v2 v2.5.0
 	github.com/jackc/pgx/v4 v4.17.2
 	github.com/julienschmidt/httprouter v1.3.0
-	github.com/mattn/go-isatty v0.0.16
+	github.com/mattn/go-isatty v0.0.17
 	github.com/rs/zerolog v1.28.0
 	github.com/spf13/cobra v1.6.1
 )
