@@ -15,7 +15,7 @@ RUN go build -ldflags="-X 'github.com/yeldiRium/spotify-rules-based-playlists-ba
 
 # ---------------------------------------------------------
 
-FROM alpine:3.17.0
+FROM alpine:3.17.1
 
 COPY --from=build /go/bin/spotify-rules-based-playlists-backend /home/root/spotify-rules-based-playlists-backend
 
