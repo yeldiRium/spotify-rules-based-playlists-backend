@@ -56,7 +56,7 @@ jobs:
 
     - name: Build and push (latest only)
       if: ${{ steps.get_next_version.outputs.hasNextVersion == 'false' }}
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v4
       with:
         push: true
         tags: ghcr.io/yeldirium/spotify-rules-based-playlists-backend:latest
@@ -64,7 +64,7 @@ jobs:
           version=${{ steps.get_next_version.outputs.version }}
     - name: Build and push (latest and versioned)
       if: ${{ steps.get_next_version.outputs.hasNextVersion == 'true' }}
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v4
       with:
         push: true
         tags: ghcr.io/yeldirium/spotify-rules-based-playlists-backend:latest,ghcr.io/yeldirium/spotify-rules-based-playlist-backend:${{steps.get_next_version.outputs.version}}
